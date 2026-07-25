@@ -37,11 +37,11 @@ boot. The same menu item removes it again.
 
 ## Install
 
-Download `wakewatch.exe` from the [latest release][releases], put it somewhere
+Download `wakewatch.exe` from the [releases page][releases], put it somewhere
 permanent, run it, and enable **Start with Windows** from the menu. Each
 release ships a `wakewatch.exe.sha256` next to the binary.
 
-[releases]: https://github.com/NightHammer1000/wakewatch/releases/latest
+[releases]: https://github.com/NightHammer1000/wakewatch/releases
 
 The binary is unsigned, so SmartScreen will warn on first run.
 
