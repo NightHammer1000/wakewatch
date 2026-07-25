@@ -119,6 +119,9 @@ CI refuses the tag if it disagrees with `Cargo.toml`, and otherwise builds,
 tests, and publishes a release with the binary and its checksum attached.
 Pushes to `main` only build — they do not create releases.
 
+`0.x` tags and any tag with a pre-release suffix (`v1.0.0-rc1`) are published
+as pre-releases, so they are not advertised as the latest download.
+
 ## Limitations
 
 - Driver reasons stored as resource-string references are not resolved — only

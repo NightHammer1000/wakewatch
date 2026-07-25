@@ -40,7 +40,9 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
         run: |
-          $tag = '${{ github.ref_name }}' -replace '^v', ''
+          # Strip the leading v and any pre-release suffix, so v1.0.0-rc1
+          # still has to agree with a Cargo.toml version of 1.0.0.
+          $tag = '${{ github.ref_name }}' -replace '^v', '' -replace '-.*$', ''
           $crate = (Select-String -Path Cargo.toml -Pattern '^version\s*=\s*"(.+)"').Matches[0].Groups[1].Value
           if ($tag -ne $crate) {
             throw "tag v$tag does not match Cargo.toml version $crate - bump Cargo.toml or retag"
@@ -84,7 +86,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # 0.x is not a finished product, and a suffixed tag (v1.0.0-rc1) is
+          # explicitly a candidate: both publish as pre-releases so neither
+          # shows up as "latest".
+          args=(--generate-notes)
+          case "$GITHUB_REF_NAME" in
+            v0.*|*-*) args+=(--prerelease) ;;
+          esac
           gh release create "$GITHUB_REF_NAME" dist/* \
             --repo "$GITHUB_REPOSITORY" \
             --title "WakeWatch $GITHUB_REF_NAME" \
-            --generate-notes
+            "${args[@]}"
