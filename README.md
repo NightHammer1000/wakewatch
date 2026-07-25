@@ -37,10 +37,13 @@ boot. The same menu item removes it again.
 
 ## Install
 
-Download `wakewatch.exe` from the latest [CI run artifacts][artifacts], put it
-somewhere permanent, run it, and enable **Start with Windows** from the menu.
+Download `wakewatch.exe` from the [latest release][releases], put it somewhere
+permanent, run it, and enable **Start with Windows** from the menu. Each
+release ships a `wakewatch.exe.sha256` next to the binary.
 
-[artifacts]: https://github.com/NightHammer1000/wakewatch/actions/workflows/ci.yml
+[releases]: https://github.com/NightHammer1000/wakewatch/releases/latest
+
+The binary is unsigned, so SmartScreen will warn on first run.
 
 Or build it yourself:
 
@@ -103,6 +106,18 @@ cargo run --example autostart_check   # exercise the scheduled-task code path
 
 `dump` is the ground-truth check: its output should agree with
 `powercfg /requests` line for line. Both need an elevated shell.
+
+### Releasing
+
+Bump `version` in `Cargo.toml`, then tag and push:
+
+```
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+CI refuses the tag if it disagrees with `Cargo.toml`, and otherwise builds,
+tests, and publishes a release with the binary and its checksum attached.
+Pushes to `main` only build — they do not create releases.
 
 ## Limitations
 
